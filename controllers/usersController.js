@@ -95,7 +95,7 @@ export const changePassword = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "Password Changed Successfully",
+    message: "Password Changed Successfullyy",
   });
 });
 
@@ -143,7 +143,7 @@ export const forgetPassword = catchAsyncError(async (req, res, next) => {
 
   const user = await User.findOne({ email });
 
-  if (!user) return next(new ErrorHandler("User not found", 400));
+  if (!user) return next(new ErrorHandler("No User with this email address", 400));
 
   const resetToken = await user.getResetToken();
 
@@ -173,7 +173,7 @@ export const resetPassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findOne({
     resetPasswordToken,
     resetPasswordExpire: {
-      $gt: Date.now(),
+      $gt: Date.now(), //mongo db operator $gt 
     },
   });
 
@@ -242,7 +242,7 @@ export const getAllUsers = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    users: 'undefined',
+    users,
   });
 });
 
@@ -299,6 +299,7 @@ export const deleteMyProfile = catchAsyncError(async (req, res, next) => {
     });
 });
 
+//real time data(statstitics) check jese data update ho to func call hoga
 User.watch().on("change", async () => {
   const stats = await Stats.find({}).sort({ createdAt: "desc" }).limit(1);
 
@@ -306,6 +307,6 @@ User.watch().on("change", async () => {
   stats[0].users = await User.countDocuments();
   stats[0].subscription = subscription.length;
   stats[0].createdAt = new Date(Date.now());
-
+  
   await stats[0].save();
-});
+ });

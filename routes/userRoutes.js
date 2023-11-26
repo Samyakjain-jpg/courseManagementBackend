@@ -2,10 +2,10 @@ import express from "express";
 import {
   addToPlaylist,
   changePassword,
-  //deleteMyProfile,
-  // deleteUser,
+  deleteMyProfile,
+  deleteUser,
   forgetPassword,
-  // getAllUsers,
+  getAllUsers,
   getMyProfile,
   login,
   logout,
@@ -14,7 +14,7 @@ import {
   resetPassword,
   updateProfile,
   updateprofilepicture,
-  // updateUserRole,
+  updateUserRole,
 } from "../controllers/userController.js";
 import { authorizeAdmin, isAuthenticated } from "../middlewares/auth.js";
 import singleUpload from "../middlewares/multer.js";
@@ -34,7 +34,7 @@ router.route("/logout").get(logout);
 router.route("/me").get(isAuthenticated, getMyProfile);
 
 // // Delete my profile
-// router.route("/me").delete(isAuthenticated, deleteMyProfile);
+ router.route("/me").delete(isAuthenticated, deleteMyProfile);
 
 // ChangePassword
 router.route("/changepassword").put(isAuthenticated, changePassword);
@@ -59,12 +59,12 @@ router.route("/addtoplaylist").post(isAuthenticated, addToPlaylist);
 router.route("/removefromplaylist").delete(isAuthenticated, removeFromPlaylist);
 
 // // Admin Routes
-// router.route("/admin/users").get(isAuthenticated, authorizeAdmin, getAllUsers);
+router.route("/admin/users").get(isAuthenticated, authorizeAdmin, getAllUsers);
 
-// router
-//   .route("/admin/user/:id")
-//   .put(isAuthenticated, authorizeAdmin, updateUserRole)
-//   .delete(isAuthenticated, authorizeAdmin, deleteUser);
+router
+  .route("/admin/user/:id")
+  .put(isAuthenticated, authorizeAdmin, updateUserRole)
+  .delete(isAuthenticated, authorizeAdmin, deleteUser);
 
 
 export default router;
